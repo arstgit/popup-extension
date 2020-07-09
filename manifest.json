@@ -1,0 +1,33 @@
+{
+  "description": "Quick popup. Pop up a small window immediately, with user customized content inside, mainly another url page.",
+  "manifest_version": 2,
+  "name": "popup url",
+  "version": "0.1",
+  "homepage_url": "https://github.com/derekchuank/popup-extension",
+  "icons": {
+    "48": "icons/popup.png"
+  },
+  "applications": {
+    "gecko": {
+      "id": "example@search.mozilla.org"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content-script/popup.js"]
+    }
+  ],
+  "permissions": [
+    "<all_urls>",
+    "activeTab",
+    "storage"
+  ],
+  "browser_action": {
+    "default_icon": "icons/popup.png",
+    "default_title": "popup url",
+    "default_popup": "toobar/toobar.html",
+    "browser_style": true
+  }
+
+}
