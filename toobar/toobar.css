@@ -1,2 +1,14 @@
  html, body {
  }
+
+.input-unit {
+  display: block;
+}
+
+label {
+  font: 1rem 'Fira Sans', sans-serif;
+}
+
+input,label {
+  margin: .4rem 0;
+}

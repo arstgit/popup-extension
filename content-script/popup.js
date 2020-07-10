@@ -1,42 +1,29 @@
 (function () {
   console.log("loading pupup url.");
 
-  const dstUrl = "https://www.bing.com";
   const dstId = "__dst_extension__";
 
   const defaultConfig = {
     status: "enable",
-    url: "aaa",
-    url2: "aaa"
+    url: "https://cn.bing.com/dict/search?q=????",
+    height: "500px",
+    width: "500px",
+    top: "20px",
+    right: "10px",
+    "border-style": "solid",
+    "border-width": "3px",
+    "border-color": "#cecece",
+    "css-overwrite-div": "",
+    "css-overwrite-iframe": "",
+    "css-overwrite": "",
   };
   const config = {};
-
-  const dstCss = `
-#__dst_extension__ {
-  position: fixed;
-  height: 500px;
-  width: 500px;
-  top: 20px;
-  right: 10px;
-  border-style:solid;
-  border-width:5px;
-  border-color: #cecece;
-  background-color: white;
-  z-index: 9999;
-}
-
-#__dst_extension__ iframe {
-  overflow-x: scroll;
-  overflow-y: scroll;
-  width: 100%;
-  height: 100%;
-  transform: scale(1, 1);
-`;
 
   // Load css style once is enough.
   let loadedCss = false;
   // Register event only once after loaded config.
   let registered = false;
+  let lastSelectedStr;
 
   function retriveConfig() {
     console.log("Loading popup url config.");
@@ -80,41 +67,61 @@
     console.log("Loaded changed popup url config.");
     console.log(config);
     registerEvent();
+
+    // Refresh popup.
+    try {
+      removeInsertedElem();
+      displayResult(lastSelectedStr, true);
+    } catch (e) {
+      console.log(e);
+    }
   });
   retriveConfig();
 
-  function registerEvent () {
-    if (registered === true) return
-    registered = true
+  function registerEvent() {
+    if (registered === true) return;
+    registered = true;
 
     document.onclick = function (e) {
-      if(config.status === "disable") return
+      if (config.status === "disable") return;
 
       console.log("popup url received click event.");
 
-      // Deleted the __dst_extension__ node, if inserted previously.
-      var insertedElem = document.getElementById(dstId);
-      if (insertedElem) {
-        insertedElem.remove();
-      }
+      removeInsertedElem();
 
       // Insert the __dst_extension node if we got a text selection.
       var selectedObj = window.getSelection();
       var selectedStr = selectedObj.toString();
-      selectedStr = selectedStr.trim();
-      if (!selectedStr) return;
 
-      queryDict(selectedStr);
+      try {
+        displayResult(selectedStr, false);
+      } catch (e) {
+        console.log(e);
+      }
     };
   }
 
-  function displayResult(result) {
-    if (!loadedCss) {
+  function removeInsertedElem() {
+    // Deleted the __dst_extension__ node, if inserted previously.
+    var insertedElem = document.getElementById(dstId);
+    if (insertedElem) {
+      insertedElem.remove();
+    }
+  }
+
+  function displayResult(selectedStr, refreshCss) {
+    selectedStr = selectedStr.trim();
+    if (!selectedStr) return;
+    lastSelectedStr = selectedStr;
+
+    if (!loadedCss || refreshCss) {
       var newCss = document.createElement("style");
-      newCss.innerHTML = dstCss;
+      newCss.innerHTML = getCss();
       document.head.appendChild(newCss);
       loadedCss = true;
     }
+
+    let computedUrl = config.url.replace("????", selectedStr);
 
     var newElem = document.createElement("div");
     newElem.innerHTML =
@@ -122,13 +129,46 @@
       dstId +
       "'>" +
       "<iframe src='" +
-      dstUrl +
+      computedUrl +
       "'" +
       ">" +
       "<p>This browser have no iframe support.<p>";
     "</iframe>" + "</div>";
 
     document.body.appendChild(newElem);
+  }
+
+  function getCss() {
+    const dstCss = `
+
+#${dstId} {
+  position: fixed;
+  height: ${config.height};
+  width: ${config.width};
+  top: ${config.top};
+  right: ${config.right};
+  border-style: ${config["border-style"]};
+  border-width: ${config["border-width"]};
+  border-color: ${config["border-color"]};
+  background-color: white;
+  z-index: 9999;
+  ${config["css-overwrite-div"]}
+}
+
+#${dstId} iframe {
+  overflow-x: scroll;
+  overflow-y: scroll;
+  width: 100%;
+  height: 100%;
+  transform: scale(1, 1);
+  ${config["css-overwrite-iframe"]}
+}
+
+${config["css-overwrite"]}
+
+`;
+
+    return dstCss;
   }
 
   console.log("Loaded popup url.");
