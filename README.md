@@ -1,6 +1,10 @@
 # popup url extension
 
+[Firefox extension link](https://addons.mozilla.org/addon/popup-url)
+
 Quick popup. Select a text, and then pop up a window in current page not a new tab immediately, with content based on your selection and configured url. Particularly useful for translating, dictionary looking up, wiki searching.
+
+![popup](https://addons.cdn.mozilla.net/user-media/previews/full/241/241359.png)
 
 Before using this extension, click this extension toolbar button to edit the configuration, fill the url parameter with your wanted url.
 
