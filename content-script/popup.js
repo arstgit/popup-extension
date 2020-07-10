@@ -116,26 +116,23 @@
 
     if (!loadedCss || refreshCss) {
       var newCss = document.createElement("style");
-      newCss.innerHTML = getCss();
+      newCss.textContent = getCss();
       document.head.appendChild(newCss);
       loadedCss = true;
     }
 
     let computedUrl = config.url.replace("????", selectedStr);
 
-    var newElem = document.createElement("div");
-    newElem.innerHTML =
-      "<div id='" +
-      dstId +
-      "'>" +
-      "<iframe src='" +
-      computedUrl +
-      "'" +
-      ">" +
-      "<p>This browser have no iframe support.<p>";
-    "</iframe>" + "</div>";
+    var newDivElem = document.createElement("div");
+    newDivElem.id = dstId;
 
-    document.body.appendChild(newElem);
+    var newIframeElem = document.createElement("iframe");
+    newIframeElem.src = computedUrl;
+    newIframeElem.textContent = "This browse have no iframe support.";
+
+    newDivElem.appendChild(newIframeElem);
+
+    document.body.appendChild(newDivElem);
   }
 
   function getCss() {
