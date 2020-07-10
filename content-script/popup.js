@@ -23,7 +23,7 @@
   let loadedCss = false;
   // Register event only once after loaded config.
   let registered = false;
-  let lastSelectedStr;
+  let lastSelectedStr = "";
 
   function retriveConfig() {
     console.log("Loading popup url config.");
@@ -110,7 +110,7 @@
   }
 
   function displayResult(selectedStr, refreshCss) {
-    selectedStr = selectedStr.trim();
+    selectedStr = selectedStr ? selectedStr.trim() : "";
     if (!selectedStr) return;
     lastSelectedStr = selectedStr;
 
