@@ -108,16 +108,6 @@
     };
   }
 
-  function queryDict(word) {
-    fetch(dstUrl, {
-      method: "GET",
-    })
-      .then((response) => response.body)
-      .then((stream) => fetchStream(stream))
-      .then((result) => displayResult(result))
-      .catch((error) => console.error(error));
-  }
-
   function displayResult(result) {
     if (!loadedCss) {
       var newCss = document.createElement("style");
@@ -142,19 +132,4 @@
   }
 
   console.log("Loaded popup url.");
-
-  // obsolated
-  function fetchStream(stream) {
-    let chunk = new Uint8Array();
-    const reader = stream.getReader();
-    return reader.read().then(function processText({ done, value }) {
-      if (done) {
-        return new TextDecoder("utf-8").decode(chunk);
-      }
-
-      chunk = new Uint8Array([...chunk, ...value]);
-
-      return reader.read().then(processText);
-    });
-  }
 })();
