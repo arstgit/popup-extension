@@ -11,8 +11,9 @@
     top: "20px",
     right: "10px",
     "border-style": "solid",
-    "border-width": "3px",
+    "border-width": "2px 0px 0px 2px",
     "border-color": "#cecece",
+    "border-radius": "5px",
     "css-overwrite-div": "",
     "css-overwrite-iframe": "",
     "css-overwrite": "",
@@ -82,23 +83,24 @@
     if (registered === true) return;
     registered = true;
 
-    document.onclick = function (e) {
-      if (config.status === "disable") return;
+    document.addEventListener("click", triggerPopup);
+    document.addEventListener("mousedown", removeInsertedElem);
+  }
 
-      console.log("popup url received click event.");
+  function triggerPopup(e) {
+    if (config.status === "disable") return;
 
-      removeInsertedElem();
+    console.log("popup url received click event.");
 
-      // Insert the __dst_extension node if we got a text selection.
-      var selectedObj = window.getSelection();
-      var selectedStr = selectedObj.toString();
+    // Insert the __dst_extension node if we got a text selection.
+    var selectedObj = window.getSelection();
+    var selectedStr = selectedObj.toString();
 
-      try {
-        displayResult(selectedStr, false);
-      } catch (e) {
-        console.log(e);
-      }
-    };
+    try {
+      displayResult(selectedStr, false);
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   function removeInsertedElem() {
@@ -144,9 +146,6 @@
   width: ${config.width};
   top: ${config.top};
   right: ${config.right};
-  border-style: ${config["border-style"]};
-  border-width: ${config["border-width"]};
-  border-color: ${config["border-color"]};
   background-color: white;
   z-index: 9999;
   ${config["css-overwrite-div"]}
@@ -157,7 +156,10 @@
   overflow-y: scroll;
   width: 100%;
   height: 100%;
-  transform: scale(1, 1);
+  border-style: ${config["border-style"]};
+  border-width: ${config["border-width"]};
+  border-color: ${config["border-color"]};
+  border-radius: ${config["border-radius"]};
   ${config["css-overwrite-iframe"]}
 }
 

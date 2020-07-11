@@ -1,5 +1,5 @@
 {
-  "description": ""Quick popup. Select a text, and then pop up a window in current page not a new tab immediately, with content based on your selection and configured url.",
+  "description": "Quick popup. Select a text, and then pop up a window in current page not a new tab immediately, with content based on your selection and configured url.",
   "manifest_version": 2,
   "name": "popup url",
   "version": "0.1",
