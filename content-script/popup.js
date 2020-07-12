@@ -26,6 +26,25 @@
   let registered = false;
   let lastSelectedStr = "";
 
+  browser.storage.onChanged.addListener((change, areaName) => {
+    for (let key of Object.keys(change.config.newValue)) {
+      config[key] = change.config.newValue[key];
+    }
+    console.log("Loaded changed popup url config.");
+    console.log(config);
+    registerEvent();
+
+    // Refresh popup.
+    try {
+      removeInsertedElem();
+      displayResult(lastSelectedStr, true);
+    } catch (e) {
+      console.log(e);
+    }
+  });
+
+  retriveConfig();
+
   function retriveConfig() {
     console.log("Loading popup url config.");
 
@@ -58,26 +77,6 @@
     let getting = browser.storage.sync.get("config");
     getting.then(onGot, onError);
   }
-  // This line not working.
-  // document.addEventListener("load", retriveConfig);
-
-  browser.storage.onChanged.addListener((change, areaName) => {
-    for (let key of Object.keys(change.config.newValue)) {
-      config[key] = change.config.newValue[key];
-    }
-    console.log("Loaded changed popup url config.");
-    console.log(config);
-    registerEvent();
-
-    // Refresh popup.
-    try {
-      removeInsertedElem();
-      displayResult(lastSelectedStr, true);
-    } catch (e) {
-      console.log(e);
-    }
-  });
-  retriveConfig();
 
   function registerEvent() {
     if (registered === true) return;
