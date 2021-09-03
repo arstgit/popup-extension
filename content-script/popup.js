@@ -6,6 +6,7 @@
   const defaultConfig = {
     status: "enable",
     url: "https://cn.bing.com/dict/search?q=????",
+    closeTimeout: "5000",
     height: "500px",
     width: "500px",
     top: "20px",
@@ -97,6 +98,10 @@
 
     try {
       displayResult(selectedStr, false);
+
+      if (config.closeTimeout !== "0") {
+        setTimeout(removeInsertedElem, parseInt(config.closeTimeout));
+      }
     } catch (e) {
       console.log(e);
     }
