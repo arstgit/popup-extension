@@ -26,6 +26,7 @@
   // Register event only once after loaded config.
   let registered = false;
   let lastSelectedStr = "";
+  let timeoutHandle;
 
   browser.storage.onChanged.addListener((change, areaName) => {
     for (let key of Object.keys(change.config.newValue)) {
@@ -100,7 +101,10 @@
       displayResult(selectedStr, false);
 
       if (config.closeTimeout !== "0") {
-        setTimeout(removeInsertedElem, parseInt(config.closeTimeout));
+        // Clear previouly setted setTimeout() if there has, clearTimeout() won't throw a error even if timeoutHandle is invalid.
+        clearTimeout(timeoutHandle);
+
+        timeoutHandle = setTimeout(removeInsertedElem, parseInt(config.closeTimeout));
       }
     } catch (e) {
       console.log(e);
